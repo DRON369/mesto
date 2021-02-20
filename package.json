@@ -6,8 +6,6 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack serve",
-    "test": "stylelint \"src/**/*.css\" && eslint --ext .js src/",
-    "fix": "stylelint \"src/**/*.css\" --fix && eslint --ext .js src/ --fix",
     "deploy": "gh-pages -d dist",
     "predeploy": "npm run build"
   },
