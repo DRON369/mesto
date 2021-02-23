@@ -2,9 +2,9 @@ import { initialCards } from '../utils/constants.js'
 
 export default class Card {
 
-  constructor({ placeLabel, placeImage }, cardTemplateSelector, handleCardClick) {
-    this._cardName = placeLabel;
-    this._cardImageLink = placeImage;
+  constructor({ name, link }, cardTemplateSelector, handleCardClick) {
+    this._cardName = name;
+    this._cardImageLink = link;
     this._cardTemplateSelector = cardTemplateSelector;
     this._handleCardClick = handleCardClick;
   }
@@ -35,7 +35,7 @@ export default class Card {
     });
 
     this._card.querySelector('.cards__image').addEventListener('click', (event) => {
-      this._handleCardClick(event);
+      this._handleCardClick(this._cardName, this._cardImageLink);
     });
   }
 
@@ -47,7 +47,6 @@ export default class Card {
     cardLabel.textContent = this._cardName;
     cardImage.src = this._cardImageLink;
     cardImage.alt = this._cardName;
-
     this._setEventListeners();
     return this._card;
   };

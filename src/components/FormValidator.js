@@ -9,12 +9,7 @@ export default class FormValidator {
   }
 
   enableValidation() {
-    this._disableValidation();
-    this._form.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-    });
     this._setEventListeners();
-    this._setButtonState();
   }
 
   _showError(input) {
@@ -37,7 +32,7 @@ export default class FormValidator {
     }
   };
 
-  _setButtonState() {
+  setButtonState() {
     if (this._form.checkValidity()) {
       this._submitButton.classList.remove(this._submitButtonDisabledSelector);
       this._submitButton.disabled = false;
@@ -52,12 +47,12 @@ export default class FormValidator {
     inputList.forEach((input) => {
       input.addEventListener('input', () => {
         this._checkInputValidity(input);
-        this._setButtonState();
+        this.setButtonState();
       });
     });
   };
 
-  _disableValidation() {
+  clearValidationMessages() {
     const inputList = this._form.querySelectorAll(this._inputSelector);
     inputList.forEach((input) => {
       this._hideError(input);
