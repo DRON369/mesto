@@ -1,10 +1,10 @@
 const autoprefixer = require('autoprefixer');
-const cssnano = require('cssnano');
+/* const cssnano = require('cssnano'); */
 
 module.exports = {
   plugins:
     [
-      autoprefixer,
-      cssnano({ preset: 'default' })
+      autoprefixer
+      /* cssnano({ preset: 'default' }) */ //! Использование вызывает некорректное изменение свойства opacity и ломает анимацию
     ]
 };
