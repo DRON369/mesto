@@ -1,0 +1,3 @@
+//! Необходимо удалить
+
+//!this._cardElement = cardElement;
