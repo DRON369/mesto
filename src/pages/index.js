@@ -7,6 +7,7 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 import FormValidator from '../components/FormValidator.js';
+import Api from '../components/Api.js';
 
 import {
   initialCards,
@@ -18,10 +19,29 @@ import {
   validationConfig,
   profileTitleSelector,
   profileSubtitleSelector,
+  profileAvatarSelector,
   popupProfileTitle,
   popupProfileSubtitle
 
 } from '../utils/constants.js';
+
+// * Инициализация класса UserInfo
+const user = new UserInfo(profileTitleSelector, profileSubtitleSelector, profileAvatarSelector);
+const profileEditPopup = new PopupWithForm(profileEditPopupSelector, (item) => {
+  user.setUserInfo(item);
+});
+profileEditPopup.setEventListeners();
+
+const api = new Api({
+  address: 'https://mesto.nomoreparties.co/v1',
+  token: 'f8102ab5-70c3-4d68-8d03-549794a26a19',
+  groupId: 'cohort-20'
+});
+
+api.getUserInfo()
+.then(res => {
+  user.setUserInfo({profileTitle: res.name, profileSubtitle: res.about, avatarUrl: res.avatar});
+})
 
 const addForm = document.querySelector(cardAddPopupSelector).querySelector('.popup__form');
 const addFormValidator = new FormValidator(validationConfig, addForm);
@@ -50,12 +70,6 @@ const cardsList = new Section({
 );
 cardsList.renderItems();
 
-// * Инициализация класса UserInfo
-const user = new UserInfo(profileTitleSelector, profileSubtitleSelector);
-const profileEditPopup = new PopupWithForm(profileEditPopupSelector, (item) => {
-  user.setUserInfo(item);
-});
-profileEditPopup.setEventListeners();
 
 // * Инициализация класса PopupWithForm
 const addCardPopup = new PopupWithForm(cardAddPopupSelector, (item) => {
@@ -79,4 +93,5 @@ addButton.addEventListener('click', () => {
   addFormValidator.setButtonState();
   addCardPopup.open();
 });
+
 

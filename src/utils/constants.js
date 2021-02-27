@@ -10,6 +10,7 @@ export const profileEditPopupSelector = '#profileEditPopup';
 export const cardAddPopupSelector = '#cardAddPopup';
 export const profileTitleSelector = '.profile__title';
 export const profileSubtitleSelector = '.profile__subtitle';
+export const profileAvatarSelector = '.profile__avatar';
 
 // Массив первоначальных карточек
 export const initialCards = [
