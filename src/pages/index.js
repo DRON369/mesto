@@ -10,7 +10,6 @@ import FormValidator from '../components/FormValidator.js';
 import Api from '../components/Api.js';
 
 import {
-  initialCards,
   cardsListSection,
   addButton,
   editButton,
@@ -28,7 +27,14 @@ import {
 // * Инициализация класса UserInfo
 const user = new UserInfo(profileTitleSelector, profileSubtitleSelector, profileAvatarSelector);
 const profileEditPopup = new PopupWithForm(profileEditPopupSelector, (item) => {
-  user.setUserInfo(item);
+  //debugger
+  //* Запись данных профиля на сервер
+  api.setUserInfo({ name: item.profileTitle, about: item.profileSubtitle })
+    .then(res => {
+
+      user.setUserInfo(item);
+    })
+    .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
 });
 profileEditPopup.setEventListeners();
 
@@ -38,10 +44,14 @@ const api = new Api({
   groupId: 'cohort-20'
 });
 
+// * Загрузка и вставка данных профиля
 api.getUserInfo()
-.then(res => {
-  user.setUserInfo({profileTitle: res.name, profileSubtitle: res.about, avatarUrl: res.avatar});
-})
+  .then(res => {
+    user.setUserInfo({ profileTitle: res.name, profileSubtitle: res.about, avatarUrl: res.avatar });
+  })
+  .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+
+
 
 const addForm = document.querySelector(cardAddPopupSelector).querySelector('.popup__form');
 const addFormValidator = new FormValidator(validationConfig, addForm);
@@ -60,7 +70,6 @@ const handleCardClick = (name, link) => {
 
 // * Первоначальная инициализация карточек
 const cardsList = new Section({
-  items: initialCards,
   renderer: (item) => {
     const card = new Card(item, '.card-template', handleCardClick);
     const cardElement = card.generateCard();
@@ -68,14 +77,21 @@ const cardsList = new Section({
   }
 }, cardsListSection
 );
-cardsList.renderItems();
 
+api.getCards()
+  .then(res => {
+    cardsList.renderItems(res);
+  })
+  .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
 
 // * Инициализация класса PopupWithForm
 const addCardPopup = new PopupWithForm(cardAddPopupSelector, (item) => {
-  const card = new Card({ name: item.placeLabel, link: item.placeImage }, '.card-template', handleCardClick);
-  const cardElement = card.generateCard();
-  cardsList.addItem(cardElement);
+  api.createCard({ name: item.placeLabel, link: item.placeImage })
+    .then(res => {
+      const card = new Card({ name: res.name, link: res.link }, '.card-template', handleCardClick);
+      const cardElement = card.generateCard();
+      cardsList.addItem(cardElement, 'start');
+    }).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
 });
 addCardPopup.setEventListeners();
 

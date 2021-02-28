@@ -1,5 +1,3 @@
-import { initialCards } from '../utils/constants.js'
-
 export default class Card {
 
   constructor({ name, link }, cardTemplateSelector, handleCardClick) {

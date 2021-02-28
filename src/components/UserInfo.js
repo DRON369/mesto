@@ -6,7 +6,7 @@ export default class UserInfo {
     this._avatarSelector = avatarSelector;
   }
 
-  getUserInfo () {
+  getUserInfo() {
     this._profileInfo = {};
     this._profileInfo.user = document.querySelector(this._userSelector).textContent;
     this._profileInfo.about = document.querySelector(this._aboutSelector).textContent;
@@ -14,7 +14,7 @@ export default class UserInfo {
     return this._profileInfo;
   }
 
-  setUserInfo ({profileTitle, profileSubtitle, avatarUrl}) {
+  setUserInfo({ profileTitle, profileSubtitle, avatarUrl }) {
     document.querySelector(this._userSelector).textContent = profileTitle;
     document.querySelector(this._aboutSelector).textContent = profileSubtitle;
     document.querySelector(this._avatarSelector).src = avatarUrl;
