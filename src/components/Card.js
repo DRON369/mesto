@@ -1,10 +1,14 @@
 export default class Card {
 
-  constructor({ name, link }, cardTemplateSelector, handleCardClick) {
+  constructor({ name, link, likes, myCard, cardId }, cardTemplateSelector, handleCardClick, handleDeleteClick) {
     this._cardName = name;
     this._cardImageLink = link;
+    this._cardLikes = likes;
+    this._myCard = myCard;
+    this._cardId = cardId;
     this._cardTemplateSelector = cardTemplateSelector;
     this._handleCardClick = handleCardClick;
+    this._handleDeleteClick = handleDeleteClick;
   }
 
   _getTemplate() {
@@ -20,7 +24,7 @@ export default class Card {
   }
 
   _removeCardHandler(event) {
-    event.target.closest('.cards__item').remove();
+    this._handleDeleteClick(this._cardId);
   }
 
   _setEventListeners() {
@@ -28,9 +32,11 @@ export default class Card {
       this._likeCardHandler(event);
     });
 
-    this._card.querySelector('.cards__remove-button').addEventListener('click', (event) => {
-      this._removeCardHandler(event);
-    });
+    if (this._myCard) {
+      this._card.querySelector('.cards__remove-button').addEventListener('click', (event) => {
+        this._removeCardHandler(event);
+      });
+    }
 
     this._card.querySelector('.cards__image').addEventListener('click', (event) => {
       this._handleCardClick(this._cardName, this._cardImageLink);
@@ -39,12 +45,22 @@ export default class Card {
 
   generateCard() {
     this._card = this._getTemplate();
+    const cardContainer = this._card.querySelector('.cards__item')
     const cardLabel = this._card.querySelector('.cards__label');
     const cardImage = this._card.querySelector('.cards__image');
+    const cardLikes = this._card.querySelector('.cards__likes-counter');
+    const cardDeleteButton = this._card.querySelector('.cards__remove-button');
 
+    if (!this._myCard) {
+      cardDeleteButton.hidden = true;
+    }
+
+    cardContainer.id = this._cardId;
     cardLabel.textContent = this._cardName;
     cardImage.src = this._cardImageLink;
     cardImage.alt = this._cardName;
+    cardLikes.textContent = (this._cardLikes.length);
+
     this._setEventListeners();
     return this._card;
   };

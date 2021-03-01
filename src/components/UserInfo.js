@@ -14,10 +14,11 @@ export default class UserInfo {
     return this._profileInfo;
   }
 
-  setUserInfo({ profileTitle, profileSubtitle, avatarUrl }) {
+  setUserInfo({ userId, profileTitle, profileSubtitle, avatarUrl }) {
     document.querySelector(this._userSelector).textContent = profileTitle;
     document.querySelector(this._aboutSelector).textContent = profileSubtitle;
     document.querySelector(this._avatarSelector).src = avatarUrl;
+    this._userId = userId;
   }
 
 }
