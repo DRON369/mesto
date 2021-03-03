@@ -92,8 +92,6 @@ const handleDeleteClick = (cardId) => {
 const handleLikeClick = (cardId, ownLike) => {
   api.likeCard(cardId, !ownLike).then(res => {
     const card = document.querySelector(`#${CSS.escape(res._id)}`);
-    console.log(res.likes);
-
     card.querySelector('.cards__likes-counter').textContent = res.likes.length;
     card.querySelector('.cards__like-button').classList.toggle('cards__like-button_liked');
   }).catch(err => console.log(`При лайке карточки возникла ошибка: ${err.status}`));

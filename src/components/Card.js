@@ -22,7 +22,8 @@ export default class Card {
   }
 
   _likeCardHandler() {
-    this._handleLikeClick(this._cardId, this._result);
+    this._handleLikeClick(this._cardId, this._like);
+    this.like();
   }
 
   _removeCardHandler() {
@@ -57,6 +58,10 @@ export default class Card {
     return this._result;
   }
 
+  like() {
+    this._like = !this._like;
+  }
+
   generateCard() {
     this._card = this._getTemplate();
     const cardContainer = this._card.querySelector('.cards__item');
@@ -68,6 +73,8 @@ export default class Card {
     if (!this._myCard) {
       cardDeleteButton.hidden = true;
     }
+
+    this._like = this._checkMyLike();
 
     if (this._checkMyLike()) {
       this._card.querySelector('.cards__like-button').classList.add('cards__like-button_liked');
