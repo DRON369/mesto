@@ -523,9 +523,11 @@ template {
   margin-bottom: 8px;
 }
 .profile__avatar {
-  max-width: 120px;
-  max-height: 120px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 @media screen and (max-width: 540px) {
@@ -533,12 +535,52 @@ template {
     margin-bottom: 26px;
   }
 }
+.profile__avatar-button {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.profile__avatar-button:before {
+  width: 120px;
+  height: 120px;
+  content: "";
+  border: none;
+  background-image: url(images/avatar-button.ae1a976ddb506239e9f0.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #000;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.profile__avatar-button:hover:before {
+  cursor: pointer;
+  opacity: 60%;
+}
+
 .profile__info {
   display: flex;
   flex-direction: column;
-  max-width: 336px;
+  max-width: 415px;
   position: relative;
   margin-left: 30px;
+}
+
+
+@media screen and (max-width: 770px) {
+  .profile__info {
+    max-width: 300px;
+  }
 }
 
 @media screen and (max-width: 540px) {
@@ -688,6 +730,12 @@ template {
      object-fit: cover;
   cursor: pointer;
 }
+.cards__like-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 7px;
+}
 .cards__like-button {
   background: url(images/like-button.df0c965524717a3fd8e9.svg);
   border: none;
@@ -705,6 +753,16 @@ template {
 }
 .cards__like-button_liked {
   background: url(images/liked-button.a7ffe37dcb927ba0c46c.svg);
+}
+.cards__likes-counter {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: center;
+    color: #000000;
+    margin: 5px 0 0 0;
 }
 .cards__remove-button {
   background: url(images/delete-button.2af49b82d305a6ea3442.svg);
@@ -815,6 +873,16 @@ template {
     padding: 25px;
   }
 }
+.popup__container_type_delete {
+  max-width: 430px;
+  max-height: 181px;
+  width: 100%;
+  height: 100%;
+}
+.popup__container_type_avatar {
+  width: 430px;
+  height: 272px;
+}
 .popup__label {
   font-family: 'Inter', 'Arial', sans-serif;
   font-style: normal;
@@ -832,6 +900,9 @@ template {
   }
 }
 
+.popup__label_type_delete {
+  margin: 0 0 33px 0;
+}
 .popup__input {
   font-family: 'Inter', 'Arial', sans-serif;
   font-style: normal;
@@ -881,6 +952,9 @@ template {
   }
 }
 
+.popup__submit-button_type_delete {
+   margin: 0;
+}
 .popup__submit-button_disabled {
   opacity: 0.3;
   transition: none;
