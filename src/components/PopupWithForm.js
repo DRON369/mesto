@@ -14,6 +14,14 @@ export default class PopupWithForm extends Popup {
     return this._formValues;
   }
 
+  formLoadingEnable() {
+    this._form.querySelector('.popup__submit-button').textContent = 'Сохранение...';
+  }
+
+  formLoadingDisable() {
+    this._form.querySelector('.popup__submit-button').textContent = 'Сохранить';
+  }
+
   close() {
     this._form.reset();
     super.close();
@@ -27,6 +35,5 @@ export default class PopupWithForm extends Popup {
  _formSubmitFunction = (evt) => {
     evt.preventDefault();
     this._handleFormSubmit(this._getInputValues());
-    this.close();
   }
 }

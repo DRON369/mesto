@@ -21,8 +21,8 @@ import {
   profileSubtitleSelector,
   profileAvatarSelector,
   popupProfileTitle,
-  popupProfileSubtitle
-
+  popupProfileSubtitle,
+  profileAvatarEditButton
 } from '../utils/constants.js';
 
 // * Инициализация класса Api
@@ -43,11 +43,17 @@ api.getUserInfo()
 
 //* Запись данных профиля на сервер
 const profileEditPopup = new PopupWithForm(profileEditPopupSelector, (item) => {
+  profileEditPopup.formLoadingEnable();
   api.setUserInfo({ name: item.profileTitle, about: item.profileSubtitle })
     .then(res => {
       user.setUserInfo({ profileTitle: res.name, profileSubtitle: res.about, avatarUrl: res.avatar });
     })
-    .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+    .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`))
+    .finally(() => {
+      profileEditPopup.formLoadingDisable();
+      profileEditPopup.close()
+    }
+    );
 });
 profileEditPopup.setEventListeners();
 
@@ -69,11 +75,10 @@ const handleCardClick = (name, link) => {
   imagePopup.open(name, link);
 }
 
-//! ===============================================
 //* Создание формы подтверждения удаления карточки
 const popupDelConfirmation = new PopupWithSubmit('.popup_type_delete', (cardId) => {
   api.deleteCard(cardId).then(res => {
-    document.querySelector(`#${CSS.escape(cardId)}`).remove();
+    document.querySelector(`#${CSS.escape(res)}`).remove();
   }).catch(err => console.log(`При удалении карточки возникла ошибка: ${err.status}`));
 });
 popupDelConfirmation.setEventListeners();
@@ -83,12 +88,22 @@ const handleDeleteClick = (cardId) => {
   popupDelConfirmation.open(cardId);
 }
 
+//* Лайк карточки */
+const handleLikeClick = (cardId, ownLike) => {
+  api.likeCard(cardId, !ownLike).then(res => {
+    const card = document.querySelector(`#${CSS.escape(res._id)}`);
+    console.log(res.likes);
+
+    card.querySelector('.cards__likes-counter').textContent = res.likes.length;
+    card.querySelector('.cards__like-button').classList.toggle('cards__like-button_liked');
+  }).catch(err => console.log(`При лайке карточки возникла ошибка: ${err.status}`));
+}
 
 // * Первоначальная инициализация карточек
 const cardsList = new Section({
   renderer: (item) => {
     const myCard = (user._userId === item.owner._id) ? true : false;
-    const card = new Card({ name: item.name, link: item.link, likes: item.likes, myCard: myCard, cardId: item._id }, '.card-template', handleCardClick, handleDeleteClick);
+    const card = new Card({ name: item.name, link: item.link, likes: item.likes, myCard: myCard, cardId: item._id, userId: user._userId }, '.card-template', handleCardClick, handleDeleteClick, handleLikeClick);
     const cardElement = card.generateCard();
     cardsList.addItem(cardElement);
   }
@@ -103,12 +118,18 @@ api.getCards()
 
 // * Инициализация класса PopupWithForm
 const addCardPopup = new PopupWithForm(cardAddPopupSelector, (item) => {
+  addCardPopup.formLoadingEnable();
   api.createCard({ name: item.placeLabel, link: item.placeImage })
     .then(res => {
-      const card = new Card({ name: res.name, link: res.link, likes: res.likes, myCard: true, cardId: res._id }, '.card-template', handleCardClick, handleDeleteClick);
+      const card = new Card({ name: res.name, link: res.link, likes: res.likes, myCard: true, cardId: res._id }, '.card-template', handleCardClick, handleDeleteClick, handleLikeClick);
       const cardElement = card.generateCard();
       cardsList.addItem(cardElement, 'start');
-    }).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+    }).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`))
+    .finally(() => {
+      addCardPopup.formLoadingDisable();
+      addCardPopup.close()
+    }
+    );
 });
 addCardPopup.setEventListeners();
 
@@ -129,3 +150,22 @@ addButton.addEventListener('click', () => {
   addCardPopup.open();
 });
 
+const popupEditAvatar = new PopupWithForm('#profileChangeAvatar', ({ avatarLink }) => {
+  popupEditAvatar.formLoadingEnable();
+  api.setAvatar(avatarLink).then(res => {
+    user.setAvatar(res.avatar);
+  }).catch(err => console.log(`При изменении аватара возникла ошибка: ${err.status}`))
+    .finally(() => {
+      popupEditAvatar.formLoadingDisable();
+      popupEditAvatar.close()
+    }
+    );
+});
+
+const editAvatarForm = document.querySelector('.popup__container_type_avatar').querySelector('.popup__form');
+popupEditAvatar.setEventListeners();
+const editAvatarValidator = new FormValidator(validationConfig, editAvatarForm);
+editAvatarValidator.enableValidation();
+profileAvatarEditButton.addEventListener('click', () => {
+  popupEditAvatar.open();
+})

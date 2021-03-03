@@ -11,6 +11,7 @@ export const cardAddPopupSelector = '#cardAddPopup';
 export const profileTitleSelector = '.profile__title';
 export const profileSubtitleSelector = '.profile__subtitle';
 export const profileAvatarSelector = '.profile__avatar';
+export const profileAvatarEditButton = document.querySelector('.profile__avatar-button');
 
   export const validationConfig = {
     inputSelector: '.popup__input',
