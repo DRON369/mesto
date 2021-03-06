@@ -5,18 +5,20 @@ export default class Api {
     this._groupId = groupId;
   }
 
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Ошибка ${res.status}`);
+    }
+  }
+
   getUserInfo() {
     return fetch(`${this._address}/${this._groupId}/users/me`, {
       headers: {
         authorization: this._token
       }
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка ${res.status}`)
-      })
+    }).then(this._checkResponse);
   }
 
   setUserInfo({ name, about }) {
@@ -30,7 +32,7 @@ export default class Api {
         name: name,
         about: about
       })
-    }).then(result => result.ok ? result.json() : Promise.reject(`Ошибка ${result.status}`))
+    }).then(this._checkResponse);
   }
 
   getCards() {
@@ -38,13 +40,7 @@ export default class Api {
       headers: {
         authorization: this._token
       }
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка ${res.status}`)
-      })
+    }).then(this._checkResponse);
   }
 
   createCard({ name, link }) {
@@ -58,7 +54,7 @@ export default class Api {
         name: name,
         link: link
       })
-    }).then(res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`))
+    }).then(this._checkResponse);
   }
 
   deleteCard(cardId) {
@@ -67,7 +63,7 @@ export default class Api {
       headers: {
         authorization: this._token,
       }
-    }).then(res => res.ok ? cardId : Promise.reject(`Ошибка ${res.status}`));
+    }).then(this._checkResponse);
   }
 
   likeCard(cardId, like) {
@@ -77,7 +73,7 @@ export default class Api {
       headers: {
         authorization: this._token,
       }
-    }).then(res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`))
+    }).then(this._checkResponse);
   }
 
   setAvatar(avatarLink) {
@@ -90,7 +86,7 @@ export default class Api {
       body: JSON.stringify({
         avatar: avatarLink
       })
-    }).then(result => result.ok ? result.json() : Promise.reject(`Ошибка ${result.status}`))
+    }).then(this._checkResponse);
   }
 
 }
