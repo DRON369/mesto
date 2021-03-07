@@ -466,7 +466,7 @@ template {
 
 
 .header__logo {
-  background: url(images/logosvg.03b78ada3425e9132ff3.svg) no-repeat;
+  background: url(images/logosvg.bbe2a6eafac19c3d031c.svg) no-repeat;
   background-size: contain;
   max-width: 142px;
   width: 100%;
@@ -549,7 +549,7 @@ template {
   height: 120px;
   content: "";
   border: none;
-  background-image: url(images/avatar-button.a086f758840ae814ecde.svg);
+  background-image: url(images/avatar-button.ae1a976ddb506239e9f0.svg);
   background-repeat: no-repeat;
   background-position: center;
   display: block;
@@ -637,7 +637,7 @@ template {
   display: flex;
   min-height: 24px;
   min-width: 24px;
-  background: #000 url(images/edit-button.a1892ea72cb87c8fc3aa.svg) center;
+  background: #000 url(images/edit-button.af236f6cf67005f1d7aa.svg) center;
   background-size: contain;
   border: none;
   padding: 0px;
@@ -662,7 +662,7 @@ template {
 
 .profile__add-button {
   border: 2px solid #fff;
-  background: #000 url(images/add-button.d86bb2edc2f6eadb96b7.svg) no-repeat center;
+  background: #000 url(images/add-button.bed8c136e13907f5eefb.svg) no-repeat center;
   width: 150px;
   height: 50px;
   padding: 0px;
@@ -737,7 +737,7 @@ template {
     margin-top: 7px;
 }
 .cards__like-button {
-  background: url(images/like-button.49570bcb1d637fdb38e5.svg);
+  background: url(images/like-button.df0c965524717a3fd8e9.svg);
   border: none;
   cursor: pointer;
   padding: 0px;
@@ -752,7 +752,7 @@ template {
   opacity: 60%;
 }
 .cards__like-button_liked {
-  background: url(images/liked-button.75438e944a43e4c0b404.svg);
+  background: url(images/liked-button.a7ffe37dcb927ba0c46c.svg);
 }
 .cards__likes-counter {
     font-family: Inter;
@@ -765,7 +765,7 @@ template {
     margin: 5px 0 0 0;
 }
 .cards__remove-button {
-  background: url(images/delete-button.a274c87c0f6b553b47ad.svg);
+  background: url(images/delete-button.2af49b82d305a6ea3442.svg);
   border: none;
   cursor: pointer;
   padding: 0px;
@@ -827,7 +827,7 @@ template {
 
 
 .popup__close-button {
-  background: url(images/close-icon.a004a2d5d464d8ddbbb5.svg) center;
+  background: url(images/close-icon.44bb1e48112a8752b62d.svg) center;
   width: 40px;
   height: 40px;
   outline: none;
