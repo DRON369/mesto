@@ -1,5 +1,5 @@
-export const imageBox = document.querySelector('.image-box');
-export const imageBoxCloseButton = imageBox.querySelector('.image-box__close-button');
+export const imageBox = document.querySelector('.popup_type_image');
+export const imageBoxCloseButton = imageBox.querySelector('.popup__close-button');
 export const profileEditForm = profileEditPopup.querySelector('.popup__form');
 export const popupProfileTitle = profileEditForm.querySelector('#profileTitle');
 export const popupProfileSubtitle = profileEditForm.querySelector('#profileSubtitle');

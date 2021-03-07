@@ -63,7 +63,7 @@ export default class Api {
       headers: {
         authorization: this._token,
       }
-    }).then(this._checkResponse);
+    }).then(res => res.ok ? cardId : Promise.reject(`Ошибка ${res.status}`));
   }
 
   likeCard(cardId, like) {

@@ -32,14 +32,67 @@ const api = new Api({
   groupId: 'cohort-20'
 });
 
+
 // * Инициализация класса UserInfo
 const user = new UserInfo(profileTitleSelector, profileSubtitleSelector, profileAvatarSelector);
-// * Загрузка и вставка данных профиля
-api.getUserInfo()
-  .then(res => {
-    user.setUserInfo({ userId: res._id, profileTitle: res.name, profileSubtitle: res.about, avatarUrl: res.avatar });
-  })
-  .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+
+// Loading page
+Promise.all([
+  api.getUserInfo()
+    .then(res => {
+      user.setUserInfo({ userId: res._id, profileTitle: res.name, profileSubtitle: res.about, avatarUrl: res.avatar });
+    })
+    .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`)),
+
+  api.getCards()
+    .then(res => {
+      cardsList.renderItems(res);
+    })
+    .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`))
+]
+).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+
+// Card creation function
+function createCard(cardItem) {
+  //* Удаление карточки */
+  const handleDeleteClick = (cardId) => {
+    popupDelConfirmation.open(cardId);
+  }
+
+  //* Лайк карточки */
+  const handleLikeClick = (cardId, ownLike, card) => {
+    api.likeCard(cardId, !ownLike).then(res => {
+      card.updateLikes(res.likes)
+    }).catch(err => console.log(`При лайке карточки возникла ошибка: ${err.status}`));
+  }
+
+  const handleCardClick = (name, link) => {
+    imagePopup.open(name, link);
+  }
+  const myCard = (user.userId === cardItem.owner._id) ? true : false;
+  const card = new Card(
+    {
+      name: cardItem.name,
+      link: cardItem.link,
+      likes: cardItem.likes,
+      myCard: myCard,
+      cardId: cardItem._id,
+      userId: user.userId
+    },
+    '.card-template',
+    handleCardClick, handleDeleteClick, handleLikeClick
+  );
+  return card;
+}
+
+// * Первоначальная инициализация карточек
+const cardsList = new Section({
+  renderer: (item) => {
+    const cardElement = createCard(item).generateCard();
+    cardsList.addItem(cardElement);
+  }
+}, cardsListSection
+);
 
 //* Запись данных профиля на сервер
 const profileEditPopup = new PopupWithForm(profileEditPopupSelector, (item) => {
@@ -68,12 +121,8 @@ const editFormValidator = new FormValidator(validationConfig, editForm);
 editFormValidator.enableValidation();
 
 // * Инициализация класса PopupWithImage
-const imagePopup = new PopupWithImage('.image-box');
+const imagePopup = new PopupWithImage('.popup_type_image');
 imagePopup.setEventListeners();
-
-const handleCardClick = (name, link) => {
-  imagePopup.open(name, link);
-}
 
 //* Создание формы подтверждения удаления карточки
 const popupDelConfirmation = new PopupWithSubmit('.popup_type_delete', (cardId) => {
@@ -83,44 +132,12 @@ const popupDelConfirmation = new PopupWithSubmit('.popup_type_delete', (cardId) 
 });
 popupDelConfirmation.setEventListeners();
 
-//* Удаление карточки */
-const handleDeleteClick = (cardId) => {
-  popupDelConfirmation.open(cardId);
-}
-
-//* Лайк карточки */
-const handleLikeClick = (cardId, ownLike) => {
-  api.likeCard(cardId, !ownLike).then(res => {
-    const card = document.querySelector(`#${CSS.escape(res._id)}`);
-    card.querySelector('.cards__likes-counter').textContent = res.likes.length;
-    card.querySelector('.cards__like-button').classList.toggle('cards__like-button_liked');
-  }).catch(err => console.log(`При лайке карточки возникла ошибка: ${err.status}`));
-}
-
-// * Первоначальная инициализация карточек
-const cardsList = new Section({
-  renderer: (item) => {
-    const myCard = (user.userId === item.owner._id) ? true : false;
-    const card = new Card({ name: item.name, link: item.link, likes: item.likes, myCard: myCard, cardId: item._id, userId: user.userId }, '.card-template', handleCardClick, handleDeleteClick, handleLikeClick);
-    const cardElement = card.generateCard();
-    cardsList.addItem(cardElement);
-  }
-}, cardsListSection
-);
-
-api.getCards()
-  .then(res => {
-    cardsList.renderItems(res);
-  })
-  .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
-
 // * Инициализация класса PopupWithForm
 const addCardPopup = new PopupWithForm(cardAddPopupSelector, (item) => {
   addCardPopup.formLoadingEnable();
   api.createCard({ name: item.placeLabel, link: item.placeImage })
     .then(res => {
-      const card = new Card({ name: res.name, link: res.link, likes: res.likes, myCard: true, cardId: res._id }, '.card-template', handleCardClick, handleDeleteClick, handleLikeClick);
-      const cardElement = card.generateCard();
+      const cardElement = createCard(res).generateCard();
       cardsList.addItem(cardElement, 'start');
     }).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`))
     .finally(() => {
@@ -165,5 +182,6 @@ popupEditAvatar.setEventListeners();
 const editAvatarValidator = new FormValidator(validationConfig, editAvatarForm);
 editAvatarValidator.enableValidation();
 profileAvatarEditButton.addEventListener('click', () => {
+  editAvatarValidator.clearValidationMessages();
   popupEditAvatar.open();
 })
