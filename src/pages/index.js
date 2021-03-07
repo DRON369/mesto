@@ -37,20 +37,12 @@ const api = new Api({
 const user = new UserInfo(profileTitleSelector, profileSubtitleSelector, profileAvatarSelector);
 
 // Loading page
-Promise.all([
-  api.getUserInfo()
-    .then(res => {
-      user.setUserInfo({ userId: res._id, profileTitle: res.name, profileSubtitle: res.about, avatarUrl: res.avatar });
-    })
-    .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`)),
-
-  api.getCards()
-    .then(res => {
-      cardsList.renderItems(res);
-    })
-    .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`))
-]
-).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+Promise.all([api.getUserInfo(), api.getCards()])
+  .then(([userData, cards]) => {
+    user.setUserInfo({ userId: userData._id, profileTitle: userData.name, profileSubtitle: userData.about, avatarUrl: userData.avatar });
+    cardsList.renderItems(cards);
+  })
+  .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
 
 // Card creation function
 function createCard(cardItem) {
