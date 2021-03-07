@@ -4,10 +4,12 @@
   height: 40px;
   outline: none;
   border: none;
-  position: absolute;
-  top: -42px;
-  left: 429px;
+  margin: 0px;
+  align-self: flex-end;
   transition: all 0.4s ease-in-out;
+  position: absolute;
+  top: -50px;
+  right: -50px;
 }
 
 .popup__close-button:hover {
@@ -18,7 +20,7 @@
 
 @media screen and (max-width: 540px) {
   .popup__close-button {
-    top: -63px;
-    left: 237px;
+    top: -50px;
+    right: -5px;
   }
 }

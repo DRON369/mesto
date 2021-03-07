@@ -3,6 +3,7 @@ import { cardsListSection } from "../utils/constants";
 export default class Popup {
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
+    this._closeButton = this._popup.querySelector('.popup__close-button');
   }
 
   open() {
@@ -16,17 +17,13 @@ export default class Popup {
   }
 
   _handleEscClose = (evt) => {
-      if (evt.code === 'Escape') {
-        this.close();
-      }
+    if (evt.code === 'Escape') {
+      this.close();
+    }
   }
 
   setEventListeners() {
-    const closeButton = this._popup.querySelector('.popup__close-button') ?
-      this._popup.querySelector('.popup__close-button') :
-      this._popup.querySelector('.image-box__close-button');
-
-    closeButton.addEventListener('click', () => {
+    this._closeButton.addEventListener('click', () => {
       this.close();
     })
 

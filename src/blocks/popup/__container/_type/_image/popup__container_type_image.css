@@ -1,4 +1,4 @@
-.image-box__container {
+.popup__container_type_image {
   display: flex;
   flex-direction: column;
   margin: auto;

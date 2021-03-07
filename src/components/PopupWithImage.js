@@ -3,20 +3,14 @@ import Popup from './Popup.js';
 export default class PopupWithImage extends Popup {
   constructor(popupSelector) {
     super(popupSelector);
-    this._popupSelector = document.querySelector(popupSelector);
-    //! Необходимо удалить
-    //!this._cardElement = cardElement;
-
+    this._imageToView = this._popup.querySelector('.popup__image');
+    this._imageToViewLabel = this._popup.querySelector('.popup__label_type_image');
   }
 
   open(name, link) {
-    const imageToView = this._popupSelector.querySelector('.image-box__image');
-    const imageToViewLabel = this._popupSelector.querySelector('.image-box__label');
-    imageToView.src = link;
-    imageToViewLabel.textContent = name;
-    imageToView.alt = name;
+    this._imageToView.src = link;
+    this._imageToViewLabel.textContent = name;
+    this._imageToView.alt = name;
     super.open();
-    document.addEventListener('keydown', this._handleEscClose);
   }
-
 }

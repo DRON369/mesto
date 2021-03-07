@@ -100,8 +100,8 @@ const handleLikeClick = (cardId, ownLike) => {
 // * Первоначальная инициализация карточек
 const cardsList = new Section({
   renderer: (item) => {
-    const myCard = (user._userId === item.owner._id) ? true : false;
-    const card = new Card({ name: item.name, link: item.link, likes: item.likes, myCard: myCard, cardId: item._id, userId: user._userId }, '.card-template', handleCardClick, handleDeleteClick, handleLikeClick);
+    const myCard = (user.userId === item.owner._id) ? true : false;
+    const card = new Card({ name: item.name, link: item.link, likes: item.likes, myCard: myCard, cardId: item._id, userId: user.userId }, '.card-template', handleCardClick, handleDeleteClick, handleLikeClick);
     const cardElement = card.generateCard();
     cardsList.addItem(cardElement);
   }
