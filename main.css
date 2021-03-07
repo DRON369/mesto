@@ -992,6 +992,16 @@ template {
   flex-direction: column;
   margin: auto;
   position: relative;
+  width: 100%;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  max-width:-webkit-max-content;
+  max-width:-moz-max-content;
+  max-width:max-content;
+  background: none;
+  padding: 0;
+  box-sizing: inherit;
 }
 
 .popup__label_type_image {
@@ -1000,7 +1010,8 @@ template {
   font-weight: normal;
   font-size: 12px;
   line-height: 15px;
-  margin-top: 10px;
+  margin: 0 10px 0 0;
+  color: #fff;
 }
 .popup__image {
   max-height: 75vh;
